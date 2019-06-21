@@ -9,7 +9,6 @@ end
 class Verificacao
     def Verificacao.existe(vetor, valor)
         if vetor.include?(valor)
-            puts 'é igual'
             return true
         else 
             return false
@@ -58,22 +57,26 @@ class Cliente < Pessoa
             
         elsif codigoComando == "Remover"
             puts "Informe o RG do cliente que deseja remover"
-            @remove_cliente = gets.chomp.to_s
-
+            @remove_cliente = gets.chomp.to_s                     
+                
             @@cadastroClientes.each_with_index do |cliente, index| 
-                if cliente.rg == @remove_cliente
+                if Verificacao.existe(@@rgs_cadastrados, @remove_cliente) == true
                     @@cadastroClientes.delete_at(index)
-                    puts "Cliente removido com Sucesso!\n Deseja remover outro cliente? S/N"   
-                    outroCadastro = gets.chomp.to_s
-                    if outroCadastro.upcase == "S" 
-                        Cliente.operacoes("Remover") 
-                    else
-                        Interface.new_op()
-                    end 
+                    puts "Cliente removido com Sucesso!"
+                else
+                    puts "Cliente não encontrado"  
                 end
-            end
-            puts "Cliente não encontrado"  
-            Interface.new_op()          
+
+            end    
+            
+            puts "\nDeseja remover outro cliente? S/N"   
+            outroCadastro = gets.chomp.to_s
+            if outroCadastro.upcase == "S" 
+                Cliente.operacoes("Remover") 
+            else
+                Interface.new_op()
+            end 
+
               
         elsif codigoComando == "Alterar"
             puts "Informe o RG do cliente que deseja alterar"
