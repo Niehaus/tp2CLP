@@ -2,13 +2,13 @@ require 'date'
 
 class Pessoa
     attr_accessor :nome, :endereco
-        @@nome = String.new#usar variavel de classe aqui? 
+        @@nome = String.new
         @@endereco = String.new
 end
 
 class Cliente < Pessoa
     attr_accessor :rg, :dataNasc
-    @@cadastroClientes = Array.new #Lista de cadastros ou hash??
+    @@cadastroClientes = Array.new 
     def initialize
         self.rg = String.new
         self.dataNasc = Date.new
@@ -72,9 +72,70 @@ class Cliente < Pessoa
             end 
               
         elsif codigoComando == "Alterar"
+            puts "Informe o RG do cliente que deseja alterar"
+            @alterar_cliente = gets.chomp.to_s
+            @@cadastroClientes.each_with_index do |cliente, index| 
+                if cliente.rg == @alterar_cliente
+                    puts "Informe Nome do Cliente: "
+                    cliente.nome = gets.chomp.to_s
+                    puts "Informe Endereco do Cliente: "
+                    cliente.endereco = gets.chomp.to_s
+                    cliente.rg = cliente.rg
+                    puts "Informe Data de Nascimento do Cliente: "
+                    cliente.dataNasc = gets.chomp.to_s
+                    @@cadastroClientes.push(cliente)
+                end
+            end
+
+            puts "Cliente removido com Sucesso!\n Deseja remover outro cliente? S/N"   
+            outroCadastro = gets.chomp.to_s
+            if outroCadastro.upcase == "S" 
+                Cliente.operacoes("Alterar") 
+            else
+                puts "Deseja realizar outra operação? S/N"   
+                outra_operacao = gets.chomp.to_s
+                if outra_operacao.upcase == "S" 
+                    controlador = Interface.new
+                    puts "Seu comando:"
+                    comando = gets.chomp.to_i
+                    controlador.controller(comando) 
+                else 
+                    puts "Obrigada por utilizar o sistema"
+                end
+            end 
             
         elsif codigoComando == "Visualizar"
             puts "1 - Visualizar Todos os Clientes\n" + "2 - Buscar por RG"
+            comando = gets.chomp.to_i
+            if comando == 1
+                @@cadastroClientes do |cliente| 
+                    puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc 
+            elsif comando == 2
+                @@cadastroClientes.each_with_index do |cliente, index| 
+                if cliente.rg == @alterar_cliente
+                    puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc
+                end
+            else
+                puts "comando invalido"
+            end
+
+            puts "Deseja visualizar outro cliente? S/N"   
+            outroCadastro = gets.chomp.to_s
+            if outroCadastro.upcase == "S" 
+                Cliente.operacoes("Visualizar") 
+            else
+                puts "Deseja realizar outra operação? S/N"   
+                outra_operacao = gets.chomp.to_s
+                if outra_operacao.upcase == "S" 
+                    controlador = Interface.new
+                    puts "Seu comando:"
+                    comando = gets.chomp.to_i
+                    controlador.controller(comando) 
+                else 
+                    puts "Obrigada por utilizar o sistema"
+                end
+            end 
+
         else
             puts "Comando Inválido. Tente novamente ou 0 para sair."
         end   
@@ -138,7 +199,7 @@ class Interface
 
     def wichOne(comando,codigoComando)
         case comando
-        when 1
+        when 1 
             #Operações com Cliente
             Cliente.operacoes(codigoComando) 
         when 2
