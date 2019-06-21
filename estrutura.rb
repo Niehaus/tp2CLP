@@ -14,6 +14,19 @@ class Cliente < Pessoa
         self.rg = ""
         self.dataNasc = Date.new
     end
+
+    def Cliente.incluir #método de classe para ser usado sem ter que instanciar
+        
+    end
+
+    def Cliente.remover
+        
+    end
+
+    def Cliente.visualizarDados
+        
+    end
+
 end
 
 class Produto
@@ -69,9 +82,38 @@ class Interface
           puts "1 - Inclusão\n" + "2 - Alteração\n" + "3 - Remoção\n" + "4 - Visualização dos Dados"
     end
 
-    def controller
-        #controlar itens do menu
-    end
+    def wichOne(comando)
+        case comando
+        when 1
+            puts "cliente"
+        when 2
 
+        when 3
+
+        else
+        end
+    end
+    #Controlador do menu
+    def controller(comando)
+        case comando
+        when 1
+            #Inclusão
+            puts "Deseja incluir\n" + "1 - Cliente\n" + "2 - Pruduto\n" + "3 - Cadastrar Venda"
+            comando2 = gets.chomp.to_i
+            wichOne(comando2)
+            #Cliente.incluir()
+        when 2
+            #Alteração
+            puts "quero alterar"
+        when 3
+            #Remoção
+            puts "quero remover"
+        when 4
+            #Visualização dos dados
+            puts "quero visualizar"
+        else
+            "Este comando não existe"
+        end
+    end
 
 end
