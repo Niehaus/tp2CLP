@@ -31,9 +31,46 @@ class Cliente < Pessoa
             @@cadastroClientes.push(@novoCadastro)
             puts "Cliente Cadastrado com Sucesso!\n Deseja Cadastrar outro Cliente? S/N"   
             outroCadastro = gets.chomp.to_s
-            if outroCadastro.upcase == "S" then Cliente.operacoes("Incluir") end #if no volta pras operações com cliente
+            if outroCadastro.upcase == "S" 
+                Cliente.operacoes("Incluir") 
+            else
+                puts "Deseja realizar outra operação? S/N"   
+                outra_operacao = gets.chomp.to_s
+                if outra_operacao.upcase == "S" 
+                    controlador = Interface.new
+                    puts "Seu comando:"
+                    comando = gets.chomp.to_i
+                    controlador.controller(comando) 
+                else 
+                    puts "Obrigada por utilizar o sistema"
+                end
+            end #if no volta pras operações com cliente
         elsif codigoComando == "Remover"
-            
+            puts "Informe o RG do cliente que deseja remover"
+            @remove_cliente = gets.chomp.to_s
+            @@cadastroClientes.each_with_index do |cliente, index| 
+                if cliente.rg == @remove_cliente
+                    @@cadastroClientes.delete_at(index)
+                end
+            end
+
+            puts "Cliente removido com Sucesso!\n Deseja remover outro cliente? S/N"   
+            outroCadastro = gets.chomp.to_s
+            if outroCadastro.upcase == "S" 
+                Cliente.operacoes("Remover") 
+            else
+                puts "Deseja realizar outra operação? S/N"   
+                outra_operacao = gets.chomp.to_s
+                if outra_operacao.upcase == "S" 
+                    controlador = Interface.new
+                    puts "Seu comando:"
+                    comando = gets.chomp.to_i
+                    controlador.controller(comando) 
+                else 
+                    puts "Obrigada por utilizar o sistema"
+                end
+            end 
+              
         elsif codigoComando == "Alterar"
             
         elsif codigoComando == "Visualizar"
