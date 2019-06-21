@@ -31,21 +31,21 @@ class Cliente < Pessoa
         #Colocar exceção em caso de dados informados errados
         if codigoComando == "Incluir" 
             puts "\n| Área p/ #{codigoComando} Cliente |"   
-            @novoCadastro = Cliente.new
+            @novo_cadastro = Cliente.new
             puts "Informe RG do Cliente: "
-            @novoCadastro.rg = gets.chomp.to_s
-            if Verificacao.existe(@@rgs_cadastrados, @novoCadastro.rg) == true
+            @novo_cadastro.rg = gets.chomp.to_s
+            if Verificacao.existe(@@rgs_cadastrados, @novo_cadastro.rg) == true
                 puts "Cliente já cadastrado"
                 Interface.new_op()
             else
-                @@rgs_cadastrados << @novoCadastro.rg
+                @@rgs_cadastrados << @novo_cadastro.rg
                 puts "Informe Nome do Cliente: "
-                @novoCadastro.nome = gets.chomp.to_s
+                @novo_cadastro.nome = gets.chomp.to_s
                 puts "Informe Endereco do Cliente: "
-                @novoCadastro.endereco = gets.chomp.to_s
+                @novo_cadastro.endereco = gets.chomp.to_s
                 puts "Informe Data de Nascimento do Cliente: "
-                @novoCadastro.dataNasc = gets.chomp.to_s
-                @@cadastroClientes.push(@novoCadastro)
+                @novo_cadastro.dataNasc = gets.chomp.to_s
+                @@cadastroClientes.push(@novo_cadastro)
                 puts "Cliente Cadastrado com Sucesso!\n Deseja Cadastrar outro Cliente? S/N"   
                 outroCadastro = gets.chomp.to_s
                 if outroCadastro.upcase == "S" 
@@ -68,7 +68,7 @@ class Cliente < Pessoa
                 end
 
             end    
-            
+
             puts "\nDeseja remover outro cliente? S/N"   
             outroCadastro = gets.chomp.to_s
             if outroCadastro.upcase == "S" 
@@ -137,11 +137,121 @@ end
 
 class Produto
     attr_accessor :codigo, :nome, :valor
+    @@produtos = Array.new 
+    @codigos_cadastrados = Array.new
+
     def initialize
-        self.codigo = Integer.new
+        self.codigo = Integer
         self.nome = ""
-        self.valor = Float.new
+        self.valor = Float
     end
+
+    def Produto.operacoes(comando_operacao)
+        if comando_operacao == "Incluir" 
+            puts "\n| Área p/ #{comando_operacao} produto |"   
+            @novo_cadastro = Produto.new
+            puts "Informe o codigo do produto: "
+            @novo_cadastro.codigo = gets.chomp.to_i
+            if Verificacao.existe(@codigos_cadastrados, @novo_cadastro.codigo) == true
+                puts "Produto já cadastrado"
+                Interface.new_op()
+            else
+                @codigos_cadastrados << @novo_cadastro.codigo
+                puts "Informe Nome do Produto: "
+                @novo_cadastro.nome = gets.chomp.to_s
+                puts "Informe o valor do Produto: "
+                @novo_cadastro.valor = gets.chomp.to_f
+                
+                @@produtos.push(@novo_cadastro)
+                puts "Produto Cadastrado com Sucesso!\n Deseja Cadastrar outro produto? S/N"   
+                outro_cadastro = gets.chomp.to_s
+                if outro_cadastro.upcase == "S" 
+                    Produto.operacoes("Incluir") 
+                else
+                    Interface.new_op()
+                end #if no volta pras operações com cliente
+            end
+            
+        elsif comando_operacao == "Remover"
+            puts "Informe o código do produto que deseja remover"
+            @remove_produto = gets.chomp.to_s                     
+                
+            @@produtos.each_with_index do |prod, index| 
+                puts @codigos_cadastrados
+                if Verificacao.existe(@codigos_cadastrados, @remove_produto) == true
+                    @@produtos.delete_at(index)
+                    puts "Produto removido com Sucesso!"
+                else
+                    puts "Produto não encontrado"  
+                end
+
+            end    
+
+            puts "\nDeseja remover outro produto? S/N"   
+            outro_cadastro = gets.chomp.to_s
+            if outro_cadastro.upcase == "S" 
+                Produto.operacoes("Remover") 
+            else
+                Interface.new_op()
+            end 
+
+              
+        elsif comando_operacao == "Alterar"
+            puts "Informe o RG do cliente que deseja alterar"
+            @alterar_cliente = gets.chomp.to_s
+            @@cadastroClientes.each_with_index do |cliente, index| 
+                if cliente.rg == @alterar_cliente
+                    puts "Informe Nome do Cliente: "
+                    cliente.nome = gets.chomp.to_s
+                    puts "Informe Endereco do Cliente: "
+                    cliente.endereco = gets.chomp.to_s
+                    cliente.rg = cliente.rg
+                    puts "Informe Data de Nascimento do Cliente: "
+                    cliente.dataNasc = gets.chomp.to_s
+                    @@cadastroClientes.push(cliente)
+                end
+            end
+
+            puts "Cliente removido com Sucesso!\n Deseja remover outro cliente? S/N"   
+            outroCadastro = gets.chomp.to_s
+            if outroCadastro.upcase == "S" 
+                Cliente.operacoes("Alterar") 
+            else
+                Interface.new_op()
+            end 
+            
+        elsif comando_operacao == "Visualizar"
+            puts "1 - Visualizar Todos os Clientes\n" + "2 - Buscar por RG"
+            comando = gets.chomp.to_i
+            if comando == 1
+                @@cadastroClientes.each do |cliente| 
+                    puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc 
+                end
+            elsif comando == 2
+                @@cadastroClientes.each_with_index do |cliente, index| 
+                    if cliente.rg == @alterar_cliente
+                        puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc
+                    end
+                end
+            else
+                puts "comando invalido"
+            end
+
+            puts "Deseja visualizar outro cliente? S/N"   
+            outroCadastro = gets.chomp.to_s
+            if outroCadastro.upcase == "S" 
+                Cliente.operacoes("Visualizar") 
+            else
+                Interface.new_op()
+                
+            end 
+
+        else
+            puts "Comando Inválido. Tente novamente ou 0 para sair."
+        end   
+    end
+
+    
 
 end
 
@@ -196,7 +306,8 @@ class Interface
             Cliente.operacoes(codigoComando) 
         when 2
             #Operações com Produto
-            puts "\n| Área p/ #{codigoComando} Produto |"
+            puts "produto insere"
+            Produto.operacoes(codigoComando)
         when 3
             #Operações com Venda
             puts "\n| Área p/ #{codigoComando} Vendas |"
