@@ -6,9 +6,22 @@ class Pessoa
         @@endereco = String.new
 end
 
+class Verificacao
+    def Verificacao.existe(vetor, valor)
+        if vetor.include?(valor)
+            puts 'é igual'
+            return true
+        else 
+            return false
+        end
+    end
+end
+
+
 class Cliente < Pessoa
     attr_accessor :rg, :dataNasc
     @@cadastroClientes = Array.new 
+    @@rgs_cadastrados = Array.new
     def initialize
         self.rg = String.new
         self.dataNasc = Date.new
@@ -20,39 +33,47 @@ class Cliente < Pessoa
         if codigoComando == "Incluir" 
             puts "\n| Área p/ #{codigoComando} Cliente |"   
             @novoCadastro = Cliente.new
-            puts "Informe Nome do Cliente: "
-            @novoCadastro.nome = gets.chomp.to_s
-            puts "Informe Endereco do Cliente: "
-            @novoCadastro.endereco = gets.chomp.to_s
             puts "Informe RG do Cliente: "
             @novoCadastro.rg = gets.chomp.to_s
-            puts "Informe Data de Nascimento do Cliente: "
-            @novoCadastro.dataNasc = gets.chomp.to_s
-            @@cadastroClientes.push(@novoCadastro)
-            puts "Cliente Cadastrado com Sucesso!\n Deseja Cadastrar outro Cliente? S/N"   
-            outroCadastro = gets.chomp.to_s
-            if outroCadastro.upcase == "S" 
-                Cliente.operacoes("Incluir") 
-            else
+            if Verificacao.existe(@@rgs_cadastrados, @novoCadastro.rg) == true
+                puts "Cliente já cadastrado"
                 Interface.new_op()
-            end #if no volta pras operações com cliente
+            else
+                @@rgs_cadastrados << @novoCadastro.rg
+                puts "Informe Nome do Cliente: "
+                @novoCadastro.nome = gets.chomp.to_s
+                puts "Informe Endereco do Cliente: "
+                @novoCadastro.endereco = gets.chomp.to_s
+                puts "Informe Data de Nascimento do Cliente: "
+                @novoCadastro.dataNasc = gets.chomp.to_s
+                @@cadastroClientes.push(@novoCadastro)
+                puts "Cliente Cadastrado com Sucesso!\n Deseja Cadastrar outro Cliente? S/N"   
+                outroCadastro = gets.chomp.to_s
+                if outroCadastro.upcase == "S" 
+                    Cliente.operacoes("Incluir") 
+                else
+                    Interface.new_op()
+                end #if no volta pras operações com cliente
+            end
+            
         elsif codigoComando == "Remover"
             puts "Informe o RG do cliente que deseja remover"
             @remove_cliente = gets.chomp.to_s
-            # :TODO adicionar um tratamento de exceção
+
             @@cadastroClientes.each_with_index do |cliente, index| 
                 if cliente.rg == @remove_cliente
                     @@cadastroClientes.delete_at(index)
                     puts "Cliente removido com Sucesso!\n Deseja remover outro cliente? S/N"   
+                    outroCadastro = gets.chomp.to_s
+                    if outroCadastro.upcase == "S" 
+                        Cliente.operacoes("Remover") 
+                    else
+                        Interface.new_op()
+                    end 
                 end
             end
-
-            outroCadastro = gets.chomp.to_s
-            if outroCadastro.upcase == "S" 
-                Cliente.operacoes("Remover") 
-            else
-                Interface.new_op()
-            end 
+            puts "Cliente não encontrado"  
+            Interface.new_op()          
               
         elsif codigoComando == "Alterar"
             puts "Informe o RG do cliente que deseja alterar"
