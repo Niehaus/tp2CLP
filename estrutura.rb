@@ -34,41 +34,24 @@ class Cliente < Pessoa
             if outroCadastro.upcase == "S" 
                 Cliente.operacoes("Incluir") 
             else
-                puts "Deseja realizar outra operação? S/N"   
-                outra_operacao = gets.chomp.to_s
-                if outra_operacao.upcase == "S" 
-                    controlador = Interface.new
-                    puts "Seu comando:"
-                    comando = gets.chomp.to_i
-                    controlador.controller(comando) 
-                else 
-                    puts "Obrigada por utilizar o sistema"
-                end
+                Interface.new_op()
             end #if no volta pras operações com cliente
         elsif codigoComando == "Remover"
             puts "Informe o RG do cliente que deseja remover"
             @remove_cliente = gets.chomp.to_s
+            # :TODO adicionar um tratamento de exceção
             @@cadastroClientes.each_with_index do |cliente, index| 
                 if cliente.rg == @remove_cliente
                     @@cadastroClientes.delete_at(index)
+                    puts "Cliente removido com Sucesso!\n Deseja remover outro cliente? S/N"   
                 end
             end
 
-            puts "Cliente removido com Sucesso!\n Deseja remover outro cliente? S/N"   
             outroCadastro = gets.chomp.to_s
             if outroCadastro.upcase == "S" 
                 Cliente.operacoes("Remover") 
             else
-                puts "Deseja realizar outra operação? S/N"   
-                outra_operacao = gets.chomp.to_s
-                if outra_operacao.upcase == "S" 
-                    controlador = Interface.new
-                    puts "Seu comando:"
-                    comando = gets.chomp.to_i
-                    controlador.controller(comando) 
-                else 
-                    puts "Obrigada por utilizar o sistema"
-                end
+                Interface.new_op()
             end 
               
         elsif codigoComando == "Alterar"
@@ -92,28 +75,21 @@ class Cliente < Pessoa
             if outroCadastro.upcase == "S" 
                 Cliente.operacoes("Alterar") 
             else
-                puts "Deseja realizar outra operação? S/N"   
-                outra_operacao = gets.chomp.to_s
-                if outra_operacao.upcase == "S" 
-                    controlador = Interface.new
-                    puts "Seu comando:"
-                    comando = gets.chomp.to_i
-                    controlador.controller(comando) 
-                else 
-                    puts "Obrigada por utilizar o sistema"
-                end
+                Interface.new_op()
             end 
             
         elsif codigoComando == "Visualizar"
             puts "1 - Visualizar Todos os Clientes\n" + "2 - Buscar por RG"
             comando = gets.chomp.to_i
             if comando == 1
-                @@cadastroClientes do |cliente| 
+                @@cadastroClientes.each do |cliente| 
                     puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc 
+                end
             elsif comando == 2
                 @@cadastroClientes.each_with_index do |cliente, index| 
-                if cliente.rg == @alterar_cliente
-                    puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc
+                    if cliente.rg == @alterar_cliente
+                        puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc
+                    end
                 end
             else
                 puts "comando invalido"
@@ -124,16 +100,8 @@ class Cliente < Pessoa
             if outroCadastro.upcase == "S" 
                 Cliente.operacoes("Visualizar") 
             else
-                puts "Deseja realizar outra operação? S/N"   
-                outra_operacao = gets.chomp.to_s
-                if outra_operacao.upcase == "S" 
-                    controlador = Interface.new
-                    puts "Seu comando:"
-                    comando = gets.chomp.to_i
-                    controlador.controller(comando) 
-                else 
-                    puts "Obrigada por utilizar o sistema"
-                end
+                Interface.new_op()
+                
             end 
 
         else
@@ -220,23 +188,23 @@ class Interface
         case comando
         when 1
             #Inclusão
-            puts "Deseja Incluir\n" + "1 - Cliente\n" + "2 - Pruduto\n" + "3 - Cadastrar Venda"
+            puts "Deseja Incluir\n" + "1 - Cliente\n" + "2 - Produto\n" + "3 - Cadastrar Venda"
             comando2 = gets.chomp.to_i
             wichOne(comando2,"Incluir")
             #Cliente.incluir()
         when 2
             #Alteração
-            puts "Deseja Alterar\n" + "1 - Cadastro de Cliente\n" + "2 - Cadastro de Pruduto\n" + "3 - Cadastro de Venda"
+            puts "Deseja Alterar\n" + "1 - Cadastro de Cliente\n" + "2 - Cadastro de Produto\n" + "3 - Cadastro de Venda"
             comando2 = gets.chomp.to_i
             wichOne(comando2,"Alterar")
         when 3
             #Remoção
-            puts "Deseja Remover\n" + "1 - Cliente\n" + "2 - Pruduto\n" + "3 - Cadastrar Venda"
+            puts "Deseja Remover\n" + "1 - Cliente\n" + "2 - Produto\n" + "3 - Cadastrar Venda"
             comando2 = gets.chomp.to_i
             wichOne(comando2,"Remover")
         when 4
             #Visualização dos dados
-            puts "Deseja Visualizar\n" + "1 - Cadastro de Cliente\n" + "2 - Cadastro de Pruduto\n" + "3 - Cadastro de Venda"
+            puts "Deseja Visualizar\n" + "1 - Cadastro de Cliente\n" + "2 - Cadastro de Produto\n" + "3 - Cadastro de Venda"
             comando2 = gets.chomp.to_i
             wichOne(comando2,"Visualizar")
         when 0 
@@ -246,6 +214,19 @@ class Interface
             puts "1 - Inclusão\n" + "2 - Alteração\n" + "3 - Remoção\n" + "4 - Visualização dos Dados\n" + "0 - Sair"
             comando = gets.chomp.to_i
             controller(comando)
+        end
+    end
+
+    def Interface.new_op()
+        puts "Deseja realizar outra operação? S/N"   
+        outra_operacao = gets.chomp.to_s
+        if outra_operacao.upcase == "S" 
+            controlador = Interface.new
+            puts "Seu comando:"
+            comando = gets.chomp.to_i
+            controlador.controller(comando) 
+        else 
+            puts "Obrigada por utilizar o sistema"
         end
     end
 
