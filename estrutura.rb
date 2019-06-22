@@ -197,40 +197,40 @@ class Produto
 
               
         elsif comando_operacao == "Alterar"
-            puts "Informe o RG do cliente que deseja alterar"
-            @alterar_cliente = gets.chomp.to_s
-            @@cadastroClientes.each_with_index do |cliente, index| 
-                if cliente.rg == @alterar_cliente
-                    puts "Informe Nome do Cliente: "
-                    cliente.nome = gets.chomp.to_s
-                    puts "Informe Endereco do Cliente: "
-                    cliente.endereco = gets.chomp.to_s
-                    cliente.rg = cliente.rg
-                    puts "Informe Data de Nascimento do Cliente: "
-                    cliente.dataNasc = gets.chomp.to_s
-                    @@cadastroClientes.push(cliente)
+            puts "Informe o código do produto que deseja alterar"
+            @codigo_altera = gets.chomp.to_s
+            @@produtos.each_with_index do |produto, index| 
+                if Verificacao.existe(@codigos_cadastrados, @codigo_altera) == true
+                    puts "Informe novo nome do produto: "
+                    produto.nome = gets.chomp.to_s
+                    puts "Informe novo preço do produto: "
+                    produto.endereco = gets.chomp.to_s
+                    produto.rg = cliente.rg
+                    @@produtos.push(produto)
                 end
             end
 
-            puts "Cliente removido com Sucesso!\n Deseja remover outro cliente? S/N"   
+            puts "\nDeseja alterar outro produto? S/N"   
             outroCadastro = gets.chomp.to_s
-            if outroCadastro.upcase == "S" 
+            if outroCadastro.upcase == "S"        
                 Cliente.operacoes("Alterar") 
             else
                 Interface.new_op()
             end 
             
         elsif comando_operacao == "Visualizar"
-            puts "1 - Visualizar Todos os Clientes\n" + "2 - Buscar por RG"
+            puts "1 - Visualizar Todos os produtos\n" + "2 - Buscar por código"
             comando = gets.chomp.to_i
             if comando == 1
-                @@cadastroClientes.each do |cliente| 
-                    puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc 
+                @@produtos.each do |produto| 
+                    puts produto.nome + " " + produto.codigo + " " + produto.valor 
                 end
             elsif comando == 2
-                @@cadastroClientes.each_with_index do |cliente, index| 
-                    if cliente.rg == @alterar_cliente
-                        puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc
+                puts "Digite o código do produto que deseja visualizar"
+                codigo_visualiza = gets.chomp.to_s
+                @@produtos.each do |produto| 
+                    if produto.codigo == @codigo_visualiza
+                        puts produto.nome + " " + produto.codigo + " " + produto.valor
                     end
                 end
             else
