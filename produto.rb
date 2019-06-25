@@ -1,8 +1,8 @@
-$codigos_cadastrados
+$codigos_cadastrados = Array.new
+
 class Produto
     attr_accessor :codigo, :nome, :valor
     @@produtos = Array.new 
-    $codigos_cadastrados = Array.new
 
     def initialize
         self.codigo = Integer
@@ -20,7 +20,7 @@ class Produto
                 puts "Produto já cadastrado"
                 Interface.new_op()
             else
-                $codigos_cadastrados << @novo_cadastro.codigo
+                $codigos_cadastrados.push(@novo_cadastro.codigo)
                 puts "Informe Nome do Produto: "
                 @novo_cadastro.nome = gets.chomp.to_s
                 puts "Informe o valor do Produto: "
@@ -62,15 +62,14 @@ class Produto
               
         elsif comando_operacao == "Alterar"
             puts "Informe o código do produto que deseja alterar"
-            @codigo_altera = gets.chomp.to_s
+            @codigo_altera = gets.chomp.to_i
             @@produtos.each_with_index do |produto, index| 
+                puts "todos os códigos de produtos cadastrados #{$codigos_cadastrados}"
                 if Interface.existe($codigos_cadastrados, @codigo_altera) == true
                     puts "Informe novo nome do produto: "
                     produto.nome = gets.chomp.to_s
                     puts "Informe novo preço do produto: "
-                    produto.endereco = gets.chomp.to_s
-                    produto.rg = cliente.rg
-                    @@produtos.push(produto)
+                    produto.valor = gets.chomp.to_f
                 end
             end
 
