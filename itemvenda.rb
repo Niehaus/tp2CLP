@@ -2,14 +2,13 @@ require_relative 'totalizavel'
 require_relative 'produto'
 
 class ItemVenda < Totalizavel
+	attr_accessor :numero, :produto, :valor, :quantidade 
     def initialize
-        self.numero = Integer.new
         self.produto = Produto.new
-        self.valor = produto.valor #o valor é copiado do valor do produto no momento da venda. 
-        self.quantidade = Integer.new
+        self.quantidade = Integer
     end
     
     def total
-        #deve calcular o valor vezes a quantidade
+        return produto.preco * quantidade
     end
 end
