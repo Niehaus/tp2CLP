@@ -41,7 +41,6 @@ class Produto
             @remove_produto = gets.chomp.to_s                     
                 
             @@produtos.each_with_index do |prod, index| 
-                puts $codigos_cadastrados
                 if Interface.existe(@codigos_cadastrados, @remove_produto) == true
                     @@produtos.delete_at(index)
                     puts "Produto removido com Sucesso!"
@@ -63,51 +62,54 @@ class Produto
         elsif comando_operacao == "Alterar"
             puts "Informe o código do produto que deseja alterar"
             @codigo_altera = gets.chomp.to_i
+
             @@produtos.each_with_index do |produto, index| 
-                puts "todos os códigos de produtos cadastrados #{$codigos_cadastrados}"
                 if Interface.existe($codigos_cadastrados, @codigo_altera) == true
                     puts "Informe novo nome do produto: "
                     produto.nome = gets.chomp.to_s
                     puts "Informe novo preço do produto: "
                     produto.valor = gets.chomp.to_f
+                    puts "\nDeseja alterar outro produto? S/N"   
+                    outroCadastro = gets.chomp.to_s
+                    if outroCadastro.upcase == "S"        
+                        Cliente.operacoes("Alterar") 
+                    else
+                        Interface.new_op()
+                    end 
+                else
+                    puts "Produto não existente no sistema, mude outro produto ou cadertre-o "
+                    Interface.new_op()
                 end
             end
 
-            puts "\nDeseja alterar outro produto? S/N"   
-            outroCadastro = gets.chomp.to_s
-            if outroCadastro.upcase == "S"        
-                Cliente.operacoes("Alterar") 
-            else
-                Interface.new_op()
-            end 
-            
+    
         elsif comando_operacao == "Visualizar"
             puts "1 - Visualizar Todos os produtos\n" + "2 - Buscar por código"
             comando = gets.chomp.to_i
             if comando == 1
                 @@produtos.each do |produto| 
-                    puts produto.nome + " " + produto.codigo + " " + produto.valor 
+                    puts "Nome: " + produto.nome + "\nCódigo do produto: " + produto.codigo.to_s + "\nValor: " + produto.valor.to_s
                 end
             elsif comando == 2
                 puts "Digite o código do produto que deseja visualizar"
-                codigo_visualiza = gets.chomp.to_s
+                codigo_visualiza = gets.chomp.to_i
+                
                 @@produtos.each do |produto| 
-                    if produto.codigo == @codigo_visualiza
-                        puts produto.nome + " " + produto.codigo + " " + produto.valor
+                    if Interface.existe($codigos_cadastrados, codigo_visualiza) == true
+                        puts "Nome: #{produto.nome} \nCódigo do produto: #{produto.codigo.to_s} \nValor: #{produto.valor.to_s}"
+                        puts "Deseja visualizar outro produto? S/N"   
+                        outroCadastro = gets.chomp.to_s
+                        if outroCadastro.upcase == "S" 
+                            Produto.operacoes("Visualizar") 
+                        end
+                    else
+                        puts "produto não encontrado no sistema"
                     end
                 end
             else
                 puts "comando invalido"
             end
-
-            puts "Deseja visualizar outro cliente? S/N"   
-            outroCadastro = gets.chomp.to_s
-            if outroCadastro.upcase == "S" 
-                Cliente.operacoes("Visualizar") 
-            else
-                Interface.new_op()
-                
-            end 
+            Interface.new_op()             
 
         else
             puts "Comando Inválido. Tente novamente ou 0 para sair."
