@@ -66,7 +66,9 @@ class Cliente < Pessoa
         elsif codigoComando == "Alterar"
             puts "Informe o RG do cliente que deseja alterar"
             @alterar_cliente = gets.chomp.to_s
+            puts $cadastro_clientes
             $cadastro_clientes.each_with_index do |cliente, index| 
+                puts 'oia nois aqui'
                 if cliente.rg == @alterar_cliente
                     puts "Informe Nome do Cliente: "
                     cliente.nome = gets.chomp.to_s
@@ -75,17 +77,20 @@ class Cliente < Pessoa
                     cliente.rg = cliente.rg
                     puts "Informe Data de Nascimento do Cliente: "
                     cliente.dataNasc = gets.chomp.to_s
-                    $cadastro_clientes.push(cliente)
+                    puts "Cliente alterado com Sucesso!\nDeseja alterar dados de outro cliente? S/N"   
+                    outroCadastro = gets.chomp.to_s
+                    if outroCadastro.upcase == "S" 
+                        Cliente.operacoes("Alterar") 
+                    else
+                        Interface.new_op()
+                    end 
+                else
+                    puts "Não existe este cliente, cadastre-o ou altere outro cliente! "
+                    Interface.new_op()
                 end
             end
 
-            puts "Cliente alterado com Sucesso!\n Deseja remover outro cliente? S/N"   
-            outroCadastro = gets.chomp.to_s
-            if outroCadastro.upcase == "S" 
-                Cliente.operacoes("Alterar") 
-            else
-                Interface.new_op()
-            end 
+            
             
         elsif codigoComando == "Visualizar"
             puts "1 - Visualizar Todos os Clientes\n" + "2 - Buscar por RG"

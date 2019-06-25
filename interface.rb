@@ -70,6 +70,7 @@ class Interface
             controlador.controller(comando) 
         else 
             puts "Obrigada por utilizar o sistema"
+            exit
         end
     end
 
