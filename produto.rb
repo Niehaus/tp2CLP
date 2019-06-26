@@ -100,6 +100,7 @@ class Produto
             if comando == 1
                 @@produtos.each do |produto| 
                     puts "Nome: " + produto.nome + "\nCódigo do produto: " + produto.codigo.to_s + "\nValor: " + produto.valor.to_s
+                    puts "----- " * 10
                 end
             elsif comando == 2
                 puts "Digite o código do produto que deseja visualizar"

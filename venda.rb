@@ -29,10 +29,8 @@ class Venda < Totalizavel
                 @novo_cadastro.cliente = Cliente.busca_cliente(rg)
                 puts "Informe a data da venda: "
                 @novo_cadastro.data = gets.chomp.to_s
-                # :TODO verificar como adicionar mais de um elemento na lista
-                #@@vendas.push(@novo_cadastro)
-                #@item_venda = ItemVenda.new
                 loop do 
+                    @item_venda = ItemVenda.new
                     puts "Informe o numero do produto vendido: "
                     codigo = gets.chomp.to_i
                     
@@ -41,8 +39,6 @@ class Venda < Totalizavel
                         puts "informe a quantidade de produtos vendidos: "
                         @item_venda.quantidade = gets.chomp.to_i
                         @novo_cadastro.itens.push(@item_venda)
-                        @@vendas.push(@novo_cadastro)
-                        # @novo_cadastro.itens.push(item_venda.produto) 
                     else
                         puts "Produto não cadastrado, por favor cadastre-o"
                         Produto.operacoes("Incluir")
@@ -52,8 +48,8 @@ class Venda < Totalizavel
                     if saida.upcase == "N"
                         break
                     end
-                end                    
-
+                end     
+                @@vendas.push(@novo_cadastro)
                 Interface.new_op()
             end
             
@@ -112,16 +108,14 @@ class Venda < Totalizavel
             if comando == 1
                 
                 @@vendas.each do |vendido| 
+                    puts "Código da venda: #{vendido.numero}"
                     puts "Cliente: #{vendido.cliente.nome}, rg: #{vendido.cliente.rg}"
                     puts "Data da venda: #{vendido.data}"
-                    puts "ITEM #{vendido.itens}"
                     vendido.itens.each do |it|
-                        puts it.produto.valor 
-                        puts it.produto.nome
-                        puts it.produto.codigo
-                        puts it.quantidade
+                        puts "Produto: #{it.produto.nome}, valor: #{it.produto.valor}, codigo: #{it.produto.codigo}, quantidade: #{it.quantidade}, preço total produto: #{it.total()}"
                     end
-                    
+                    puts "Total da compra: #{vendido.total(vendido.numero)}"
+                    Interface.new_op()
                 end
             elsif comando == 2
                 puts "Digite o código do produto que deseja visualizar"
@@ -157,8 +151,8 @@ class Venda < Totalizavel
     end
 
     def Venda.busca_venda(codigo)
-        @@venda.each do |cl|
-            if cl.codigo == codigo
+        @@vendas.each do |cl|
+            if cl.numero == codigo
                 return cl
             end
         end
