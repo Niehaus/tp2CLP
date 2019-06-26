@@ -39,19 +39,24 @@ class Cliente < Pessoa
                 puts "Informe Data de Nascimento do Cliente: "
                 @novo_cadastro.dataNasc = gets.chomp.to_s
                 $cadastro_clientes.push(@novo_cadastro)
-                puts "Cliente Cadastrado com Sucesso!\n Deseja Cadastrar outro Cliente? S/N"   
+                puts "Cliente Cadastrado com Sucesso!\nDeseja Cadastrar outro Cliente? S/N"   
                 outroCadastro = gets.chomp.to_s
                 if outroCadastro.upcase == "S" 
                     Cliente.operacoes("Incluir") 
                 else
                     Interface.new_op()
-                end #if no volta pras operações com cliente
+                end 
             end
             
         elsif codigoComando == "Remover"
+            if $cadastro_clientes.length == 0 
+                puts "Não há usuário cadastrado!"
+                Interface.new_op()
+            end   
+                           
             puts "Informe o RG do cliente que deseja remover"
-            @remove_cliente = gets.chomp.to_s                     
-                
+            @remove_cliente = gets.chomp.to_s   
+
             $cadastro_clientes.each_with_index do |cliente, index| 
                 if Interface.existe($rgs_cadastrados, @remove_cliente) == true
                     $cadastro_clientes.delete_at(index)
@@ -62,7 +67,7 @@ class Cliente < Pessoa
 
             end    
 
-            puts "\nDeseja remover outro cliente? S/N"   
+            puts "\nDeseja remover um cliente? S/N"   
             outroCadastro = gets.chomp.to_s
             if outroCadastro.upcase == "S" 
                 Cliente.operacoes("Remover") 
@@ -72,11 +77,15 @@ class Cliente < Pessoa
 
               
         elsif codigoComando == "Alterar"
+            if $cadastro_clientes.length == 0 
+                puts "Não há usuário cadastrado!"
+                Interface.new_op()
+            end  
+
             puts "Informe o RG do cliente que deseja alterar"
             @alterar_cliente = gets.chomp.to_s
             puts $cadastro_clientes
             $cadastro_clientes.each_with_index do |cliente, index| 
-                puts 'oia nois aqui'
                 if cliente.rg == @alterar_cliente
                     puts "Informe Nome do Cliente: "
                     cliente.nome = gets.chomp.to_s

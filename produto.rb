@@ -38,7 +38,7 @@ class Produto
                 @novo_cadastro.valor = gets.chomp.to_f
                 
                 @@produtos.push(@novo_cadastro)
-                puts "Produto Cadastrado com Sucesso!\n Deseja Cadastrar outro produto? S/N"   
+                puts "Produto Cadastrado com Sucesso!\nDeseja Cadastrar outro produto? S/N"   
                 outro_cadastro = gets.chomp.to_s
                 if outro_cadastro.upcase == "S" 
                     Produto.operacoes("Incluir") 
@@ -48,11 +48,17 @@ class Produto
             end
             
         elsif comando_operacao == "Remover"
+            # Verifica se existe algum produto para poder remover
+            if @@produtos.length == 0
+                puts "Não existe nenhum produto cadastrado"
+                Interface.new_op()
+            end   
+
             puts "Informe o código do produto que deseja remover"
-            @remove_produto = gets.chomp.to_s                     
+            @remove_produto = gets.chomp.to_i  
                 
             @@produtos.each_with_index do |prod, index| 
-                if Interface.existe(@codigos_cadastrados, @remove_produto) == true
+                if Interface.existe($codigos_cadastrados, @remove_produto) == true
                     @@produtos.delete_at(index)
                     puts "Produto removido com Sucesso!"
                 else
@@ -61,7 +67,7 @@ class Produto
 
             end    
 
-            puts "\nDeseja remover outro produto? S/N"   
+            puts "\nDeseja remover um produto? S/N"   
             outro_cadastro = gets.chomp.to_s
             if outro_cadastro.upcase == "S" 
                 Produto.operacoes("Remover") 
@@ -71,6 +77,10 @@ class Produto
 
               
         elsif comando_operacao == "Alterar"
+            if @@produtos.length == 0
+                puts "Não existe nenhum produto cadastrado"
+                Interface.new_op()
+            end
             puts "Informe o código do produto que deseja alterar"
             @codigo_altera = gets.chomp.to_i
 

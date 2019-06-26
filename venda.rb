@@ -19,7 +19,6 @@ class Venda < Totalizavel
         if comando_operacao == "Incluir" 
             puts "\n| Área p/ #{comando_operacao} venda |"   
             @novo_cadastro = Venda.new
-            puts "O vetor de clientes: #{$rgs_cadastrados}"
             puts "Informe o RG do cliente: "
             rg = gets.chomp.to_s
             if Interface.existe($rgs_cadastrados, rg) == false
@@ -55,21 +54,26 @@ class Venda < Totalizavel
             
 
         elsif comando_operacao == "Remover"
+            if @@produtos.length == 0
+                puts "Não há vendas cadastradas!"
+                Interface.new_op()
+            end
+
             puts "Informe o número da venda que deseja remover"
             remove_venda = gets.chomp.to_s                     
                 
             @@vendas.each_with_index do |prod, index| 
-                puts @codigos_cadastrados
                 if Interface.existe(@codigos_cadastrados, remove_venda) == true
                     @@vendas.delete_at(index)
                     puts "Venda removido com Sucesso!"
                 else
-                    puts "Venda não encontrado"  
+                    puts "Venda não encontrado!"
+                    Interface.new_op()
                 end
 
             end    
 
-            puts "\nDeseja remover outra venda? S/N"   
+            puts "\nDeseja remover uma venda? S/N"   
             outra_venda = gets.chomp.to_s
             if outra_venda.upcase == "S" 
                 Venda.operacoes("Remover") 
@@ -79,10 +83,15 @@ class Venda < Totalizavel
 
               
         elsif comando_operacao == "Alterar"
+            if @@produtos.length == 0
+                puts "Não há vendas cadastradas!"
+                Interface.new_op()
+            end
+
             puts "Informe o código do produto que deseja alterar"
             codigo_altera = gets.chomp.to_s
             @@venda.each_with_index do |vendas, index| 
-                if Interface.existe(@codigos_cadastrados, codigo_altera) == true
+                if Interface.existe($codigos_cadastrados, codigo_altera) == true
                     puts "Informe nome do produto: "
                     vedas.numero = gets.chomp.to_i
                     vendas.itens do |it|
@@ -91,6 +100,9 @@ class Venda < Totalizavel
                         puts "Informe a quantidade vendida do produto: "
                         vendas.quantidade = gets.chomp.to_i
                     end
+                else
+                    puts "Não existe este produto!"
+                    Interface.new_op()
                 end
             end
 
