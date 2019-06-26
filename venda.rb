@@ -53,7 +53,7 @@ class Venda < Totalizavel
             
 
         elsif comando_operacao == "Remover"
-            if @@produtos.length == 0
+            if @@vendas.length == 0
                 puts "Não há vendas cadastradas!"
                 Interface.new_op()
             end
@@ -82,7 +82,7 @@ class Venda < Totalizavel
 
               
         elsif comando_operacao == "Alterar"
-            if @@produtos.length == 0
+            if @@vendas.length == 0
                 puts "Não há vendas cadastradas!"
                 Interface.new_op()
             end
@@ -114,6 +114,10 @@ class Venda < Totalizavel
             end 
             
         elsif comando_operacao == "Visualizar"
+             if @@vendas.length == 0
+                puts "Não há vendas cadastradas!"
+                Interface.new_op()
+            end
             puts "1 - Visualizar todas as vendas\n" + "2 - Buscar por número"
             comando = gets.chomp.to_i
             if comando == 1

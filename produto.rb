@@ -21,6 +21,7 @@ class Produto
         end
     end
 
+
     def Produto.operacoes(comando_operacao)
         if comando_operacao == "Incluir" 
             puts "\n| Área p/ #{comando_operacao} produto |"   
@@ -35,7 +36,8 @@ class Produto
                 puts "Informe Nome do Produto: "
                 @novo_cadastro.nome = gets.chomp.to_s
                 puts "Informe o valor do Produto: "
-                @novo_cadastro.valor = gets.chomp.to_f                
+                @novo_cadastro.valor = gets.chomp.to_f
+                Produto.typeTeste(@novo_cadastro.valor)
                 @@produtos.push(@novo_cadastro)
                 puts "Produto Cadastrado com Sucesso!\nDeseja Cadastrar outro produto? S/N"   
                 outro_cadastro = gets.chomp.to_s
@@ -43,7 +45,7 @@ class Produto
                     Produto.operacoes("Incluir") 
                 else
                     Interface.new_op()
-                end #if no volta pras operações com cliente
+                end 
             end
             
         elsif comando_operacao == "Remover"
@@ -104,6 +106,10 @@ class Produto
 
     
         elsif comando_operacao == "Visualizar"
+            if @@produtos.length == 0
+                puts "Não existe nenhum produto cadastrado"
+                Interface.new_op()
+            end
             puts "1 - Visualizar Todos os produtos\n" + "2 - Buscar por código"
             comando = gets.chomp.to_i
             if comando == 1

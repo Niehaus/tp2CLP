@@ -14,7 +14,6 @@ class Interface
             Cliente.operacoes(codigoComando) 
         when 2
             #Operações com Produto
-            puts "produto insere"
             Produto.operacoes(codigoComando)
         when 3
             #Operações com Venda

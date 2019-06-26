@@ -19,6 +19,15 @@ class Cliente < Pessoa
         end
     end
 
+    def Cliente.valiDate(value)
+        if value =~ /\d{2}\/\d{2}\/\d{4}/
+            return true
+        else
+            puts "Data inválida."
+            return false
+        end
+    end
+    
     def Cliente.operacoes(codigoComando)
 
         #Colocar exceção em caso de dados informados errados
@@ -36,16 +45,21 @@ class Cliente < Pessoa
                 @novo_cadastro.nome = gets.chomp.to_s
                 puts "Informe Endereco do Cliente: "
                 @novo_cadastro.endereco = gets.chomp.to_s
-                puts "Informe Data de Nascimento do Cliente: "
+                puts "Informe Data de Nascimento do Cliente: (dd/mm/yyyy) "
                 @novo_cadastro.dataNasc = gets.chomp.to_s
-                $cadastro_clientes.push(@novo_cadastro)
-                puts "Cliente Cadastrado com Sucesso!\nDeseja Cadastrar outro Cliente? S/N"   
-                outroCadastro = gets.chomp.to_s
-                if outroCadastro.upcase == "S" 
-                    Cliente.operacoes("Incluir") 
+                if Cliente.valiDate(@novo_cadastro.dataNasc)
+                    $cadastro_clientes.push(@novo_cadastro)
+                    puts "Cliente Cadastrado com Sucesso!\nDeseja Cadastrar outro Cliente? S/N"   
+                    outroCadastro = gets.chomp.to_s
+                    if outroCadastro.upcase == "S" 
+                        Cliente.operacoes("Incluir") 
+                    else
+                        Interface.new_op()
+                    end 
                 else
-                    Interface.new_op()
-                end 
+                    $rgs_cadastrados.pop
+                    Cliente.operacoes("Incluir")
+                end
             end
             
         elsif codigoComando == "Remover"
@@ -110,16 +124,21 @@ class Cliente < Pessoa
             
             
         elsif codigoComando == "Visualizar"
+            if $cadastro_clientes.length == 0 
+                puts "Não há usuário cadastrado!"
+                Interface.new_op()
+            end  
             puts "1 - Visualizar Todos os Clientes\n" + "2 - Buscar por RG"
             comando = gets.chomp.to_i
             if comando == 1
                 $cadastro_clientes.each do |cliente| 
-                    puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc 
+                    puts "Nome:" + cliente.nome + "\t Endereço: " + cliente.endereco + "\t RG: " + cliente.rg + "\t DataNasc: " + cliente.dataNasc 
+                    puts "----- " * 10
                 end
             elsif comando == 2
                 $cadastro_clientes.each_with_index do |cliente, index| 
                     if cliente.rg == @alterar_cliente
-                        puts cliente.nome + " " + cliente.endereco + " " + cliente.rg + " " + cliente.dataNasc
+                        puts "Nome:" + cliente.nome + "\t Endereço: " + cliente.endereco + "\t RG: " + cliente.rg + "\t DataNasc: " + cliente.dataNasc 
                     end
                 end
             else
@@ -131,8 +150,7 @@ class Cliente < Pessoa
             if outroCadastro.upcase == "S" 
                 Cliente.operacoes("Visualizar") 
             else
-                Interface.new_op()
-                
+                Interface.new_op()     
             end 
 
         else
