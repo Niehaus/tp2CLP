@@ -26,23 +26,24 @@ class Venda < Totalizavel
                 puts "Cliente não cadastrado, por favor cadastre-o"
                 Cliente.operacoes("Incluir")
             else 
-                @novo_cadastro.cliente.rg = rg
+                @novo_cadastro.cliente = Cliente.busca_cliente(rg)
                 puts "Informe a data da venda: "
                 @novo_cadastro.data = gets.chomp.to_s
-                item_venda = ItemVenda.new
+                @item_venda = ItemVenda.new
                 loop do 
                     puts "Informe o numero do produto vendido: "
                     codigo = gets.chomp.to_i
                     
                     if Interface.existe($codigos_cadastrados, codigo) == true
-                        @novo_cadastro.itens.push(item_venda.produto) 
+                        @item_venda.produto = Produto.busca_produto(codigo)
+                        puts "informe a quantidade de produtos vendidos: "
+                        @item_venda.quantidade = gets.chomp.to_i
+                        @novo_cadastro.itens.push(@item_venda)
+                        # @novo_cadastro.itens.push(item_venda.produto) 
                     else
                         puts "Produto não cadastrado, por favor cadastre-o"
                         Produto.operacoes("Incluir")
                     end
-                    puts "informe a quantidade de produtos vendidos: "
-                    item_venda.quantidade = gets.chomp
-                    @novo_cadastro.itens.push(item_venda.quantidade)
                     puts "Deseja cadastrar mais um produto? S/N "
                     saida = gets.chomp.to_s
                     if saida.upcase == "N"
@@ -110,12 +111,12 @@ class Venda < Totalizavel
                 # puts "Vendas #{@@vendas}"
                 @@vendas.each do |vendido| 
                     puts "Cliente: #{vendido.cliente.nome}, rg: #{vendido.cliente.rg}"
-                    puts "Data da venda: #{vendido.data}" 
-                    vendido.itens do |it|
-                        puts "entra aqui"
+                    puts "Data da venda: #{vendido.data}"
+                    vendido.itens.each do |it|
                         puts it.produto.valor 
                         puts it.produto.nome
                         puts it.produto.codigo
+                        puts it.quantidade
                     end
                     # puts "Valor do produto: " + vendido.itens.produto.valor
                     #puts vendido.itens.item_venda.produto.nome + " " + vendido.itens.item_venda.produto.nome + " " + vendido.itens.item_venda.produto.valor + " " 
