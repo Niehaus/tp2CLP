@@ -35,7 +35,13 @@ class Produto
                 puts "Informe Nome do Produto: "
                 @novo_cadastro.nome = gets.chomp.to_s
                 puts "Informe o valor do Produto: "
-                @novo_cadastro.valor = gets.chomp.to_f
+                @novo_cadastro.valor = gets.chomp
+                begin
+                    @novo_cadastro.valor.to_f
+                    rescue Exception => ex
+                        puts "Houve um erro: " + ex.message
+                end
+                puts @novo_cadastro.valor.class
                 
                 @@produtos.push(@novo_cadastro)
                 puts "Produto Cadastrado com Sucesso!\nDeseja Cadastrar outro produto? S/N"   

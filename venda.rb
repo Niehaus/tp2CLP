@@ -12,7 +12,6 @@ class Venda < Totalizavel
         self.data = Date.new
         self.cliente = Cliente.new
         self.itens = Array.new
-        # self.item_venda = ItemVenda.new
     end
 
     def Venda.operacoes(comando_operacao)

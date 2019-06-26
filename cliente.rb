@@ -53,7 +53,7 @@ class Cliente < Pessoa
                 puts "Não há usuário cadastrado!"
                 Interface.new_op()
             end   
-                           
+
             puts "Informe o RG do cliente que deseja remover"
             @remove_cliente = gets.chomp.to_s   
 
