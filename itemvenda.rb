@@ -9,6 +9,6 @@ class ItemVenda < Totalizavel
     end
     
     def total
-        return produto.preco * quantidade
+        return produto.valor * quantidade
     end
 end

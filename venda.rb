@@ -29,7 +29,9 @@ class Venda < Totalizavel
                 @novo_cadastro.cliente = Cliente.busca_cliente(rg)
                 puts "Informe a data da venda: "
                 @novo_cadastro.data = gets.chomp.to_s
-                @item_venda = ItemVenda.new
+                # :TODO verificar como adicionar mais de um elemento na lista
+                #@@vendas.push(@novo_cadastro)
+                #@item_venda = ItemVenda.new
                 loop do 
                     puts "Informe o numero do produto vendido: "
                     codigo = gets.chomp.to_i
@@ -39,6 +41,7 @@ class Venda < Totalizavel
                         puts "informe a quantidade de produtos vendidos: "
                         @item_venda.quantidade = gets.chomp.to_i
                         @novo_cadastro.itens.push(@item_venda)
+                        @@vendas.push(@novo_cadastro)
                         # @novo_cadastro.itens.push(item_venda.produto) 
                     else
                         puts "Produto não cadastrado, por favor cadastre-o"
@@ -50,8 +53,7 @@ class Venda < Totalizavel
                         break
                     end
                 end                    
-                
-                @@vendas.push(@novo_cadastro)
+
                 Interface.new_op()
             end
             
@@ -108,26 +110,33 @@ class Venda < Totalizavel
             puts "1 - Visualizar todas as vendas\n" + "2 - Buscar por número"
             comando = gets.chomp.to_i
             if comando == 1
-                # puts "Vendas #{@@vendas}"
+                
                 @@vendas.each do |vendido| 
                     puts "Cliente: #{vendido.cliente.nome}, rg: #{vendido.cliente.rg}"
                     puts "Data da venda: #{vendido.data}"
+                    puts "ITEM #{vendido.itens}"
                     vendido.itens.each do |it|
                         puts it.produto.valor 
                         puts it.produto.nome
                         puts it.produto.codigo
                         puts it.quantidade
                     end
-                    # puts "Valor do produto: " + vendido.itens.produto.valor
-                    #puts vendido.itens.item_venda.produto.nome + " " + vendido.itens.item_venda.produto.nome + " " + vendido.itens.item_venda.produto.valor + " " 
-                    # + vendido.itens.item_venda.quantidade + " " + vendido.data + " " + vendido.cliente
+                    
                 end
             elsif comando == 2
                 puts "Digite o código do produto que deseja visualizar"
                 codigo_visualiza = gets.chomp.to_s
                 @@vendas.each do |produto| 
                     if produto.codigo == @codigo_visualiza
-                        puts produto.nome + " " + produto.codigo + " " + produto.valor
+                        puts "Cliente: #{vendido.cliente.nome}, rg: #{vendido.cliente.rg}"
+                        puts "Data da venda: #{vendido.data}"
+                        vendido.itens.each do |it|
+                            puts it.produto.valor 
+                            puts it.produto.nome
+                            puts it.produto.codigo
+                            puts it.quantidade
+                            puts @@vendas.total(@@vendas.numero)
+                        end
                     end
                 end
                 puts "Deseja visualizar outra venda? S/N"   
@@ -147,7 +156,20 @@ class Venda < Totalizavel
         end   
     end
 
-    def total
-        # deve calcular a soma dos totais de cada item 
+    def Venda.busca_venda(codigo)
+        @@venda.each do |cl|
+            if cl.codigo == codigo
+                return cl
+            end
+        end
+    end
+
+    def total(venda)
+        obj_venda = Venda.busca_venda(venda)
+        resul = 0
+        obj_venda.itens.each do |it|
+            resul += it.total()
+        end
+        return resul
     end
 end
