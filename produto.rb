@@ -2,12 +2,23 @@ $codigos_cadastrados = Array.new
 
 class Produto
     attr_accessor :codigo, :nome, :valor
+    attr_reader :codigo, :nome, :valor
+    attr_writer :codigo, :nome, :valor
+
     @@produtos = Array.new 
 
     def initialize
         self.codigo = Integer
         self.nome = ""
         self.valor = Float
+    end
+
+    def Produto.busca_produto(codigo)
+        @@produtos.each do |cl|
+            if cl.codigo == codigo
+                return cl
+            end
+        end
     end
 
     def Produto.operacoes(comando_operacao)

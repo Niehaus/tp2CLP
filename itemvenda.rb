@@ -2,7 +2,7 @@ require_relative 'totalizavel'
 require_relative 'produto'
 
 class ItemVenda < Totalizavel
-	attr_accessor :numero, :produto, :valor, :quantidade 
+	attr_accessor :produto, :quantidade 
     def initialize
         self.produto = Produto.new
         self.quantidade = Integer

@@ -11,6 +11,14 @@ class Cliente < Pessoa
         self.dataNasc = Date.new
     end
 
+    def Cliente.busca_cliente(rg)
+        $cadastro_clientes.each do |cl|
+            if cl.rg == rg
+                return cl
+            end
+        end
+    end
+
     def Cliente.operacoes(codigoComando)
 
         #Colocar exceção em caso de dados informados errados
