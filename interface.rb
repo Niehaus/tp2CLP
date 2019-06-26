@@ -60,12 +60,14 @@ class Interface
     end
 
     def Interface.new_op()
+        puts "----- " * 10
         puts "Deseja realizar outra operação? S/N"   
         outra_operacao = gets.chomp.to_s
         if outra_operacao.upcase == "S" 
             controlador = Interface.new
             puts "Seu comando:"
             comando = gets.chomp.to_i
+            puts "----- " * 10
             controlador.controller(comando) 
         else 
             puts "Obrigada por utilizar o sistema"

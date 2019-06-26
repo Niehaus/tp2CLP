@@ -18,6 +18,8 @@ class Venda < Totalizavel
         if comando_operacao == "Incluir" 
             puts "\n| Área p/ #{comando_operacao} venda |"   
             @novo_cadastro = Venda.new
+            puts "Informe o código da venda"
+            @novo_cadastro.numero = gets.chomp.to_i
             puts "Informe o RG do cliente: "
             rg = gets.chomp.to_s
             if Interface.existe($rgs_cadastrados, rg) == false
@@ -30,10 +32,10 @@ class Venda < Totalizavel
                 loop do 
                     @item_venda = ItemVenda.new
                     puts "Informe o numero do produto vendido: "
-                    codigo = gets.chomp.to_i
+                    num = gets.chomp.to_i
                     
-                    if Interface.existe($codigos_cadastrados, codigo) == true
-                        @item_venda.produto = Produto.busca_produto(codigo)
+                    if Interface.existe($codigos_cadastrados, num) == true
+                        @item_venda.produto = Produto.busca_produto(num)
                         puts "informe a quantidade de produtos vendidos: "
                         @item_venda.quantidade = gets.chomp.to_i
                         @novo_cadastro.itens.push(@item_venda)
@@ -41,14 +43,21 @@ class Venda < Totalizavel
                         puts "Produto não cadastrado, por favor cadastre-o"
                         Produto.operacoes("Incluir")
                     end
-                    puts "Deseja cadastrar mais um produto? S/N "
+                    puts "\nDeseja cadastrar mais um produto? S/N "
                     saida = gets.chomp.to_s
                     if saida.upcase == "N"
                         break
                     end
                 end     
                 @@vendas.push(@novo_cadastro)
-                Interface.new_op()
+                puts "Venda efetuada com sucesso!"
+                puts "\n\nDeseja adicionar outra venda? S/N"   
+                outra_venda = gets.chomp.to_s
+                if outra_venda.upcase == "S" 
+                    Venda.operacoes("Incluir") 
+                else
+                    Interface.new_op()
+                end 
             end
             
 
@@ -65,20 +74,18 @@ class Venda < Totalizavel
                 if Interface.existe(@codigos_cadastrados, remove_venda) == true
                     @@vendas.delete_at(index)
                     puts "Venda removido com Sucesso!"
+                    puts "\n\nDeseja remover outra venda? S/N"   
+                    outra_venda = gets.chomp.to_s
+                    if outra_venda.upcase == "S" 
+                        Venda.operacoes("Remover") 
+                    end 
                 else
                     puts "Venda não encontrado!"
                     Interface.new_op()
                 end
 
-            end    
-
-            puts "\nDeseja remover uma venda? S/N"   
-            outra_venda = gets.chomp.to_s
-            if outra_venda.upcase == "S" 
-                Venda.operacoes("Remover") 
-            else
                 Interface.new_op()
-            end 
+            end    
 
               
         elsif comando_operacao == "Alterar"
@@ -99,19 +106,19 @@ class Venda < Totalizavel
                         puts "Informe a quantidade vendida do produto: "
                         vendas.quantidade = gets.chomp.to_i
                     end
+                    puts "Venda alterada com sucesso! \n\nDeseja alterar outra venda? S/N"   
+                    outroCadastro = gets.chomp.to_s
+                    if outroCadastro.upcase == "S"        
+                        Venda.operacoes("Alterar") 
+                    else
+                        Interface.new_op()
+                    end 
                 else
                     puts "Não existe este produto!"
                     Interface.new_op()
                 end
             end
 
-            puts "\nDeseja alterar outra venda? S/N"   
-            outroCadastro = gets.chomp.to_s
-            if outroCadastro.upcase == "S"        
-                Venda.operacoes("Alterar") 
-            else
-                Interface.new_op()
-            end 
             
         elsif comando_operacao == "Visualizar"
              if @@vendas.length == 0
@@ -120,8 +127,7 @@ class Venda < Totalizavel
             end
             puts "1 - Visualizar todas as vendas\n" + "2 - Buscar por número"
             comando = gets.chomp.to_i
-            if comando == 1
-                
+            if comando == 1                
                 @@vendas.each do |vendido| 
                     puts "Código da venda: #{vendido.numero}"
                     puts "Cliente: #{vendido.cliente.nome}, rg: #{vendido.cliente.rg}"
@@ -130,8 +136,9 @@ class Venda < Totalizavel
                         puts "Produto: #{it.produto.nome}, valor: #{it.produto.valor}, codigo: #{it.produto.codigo}, quantidade: #{it.quantidade}, preço total produto: #{it.total()}"
                     end
                     puts "Total da compra: #{vendido.total(vendido.numero)}"
-                    Interface.new_op()
+                    puts "----- " * 10
                 end
+                Interface.new_op()
             elsif comando == 2
                 puts "Digite o código do produto que deseja visualizar"
                 codigo_visualiza = gets.chomp.to_s

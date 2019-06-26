@@ -49,7 +49,7 @@ class Cliente < Pessoa
                 @novo_cadastro.dataNasc = gets.chomp.to_s
                 if Cliente.valiDate(@novo_cadastro.dataNasc)
                     $cadastro_clientes.push(@novo_cadastro)
-                    puts "Cliente Cadastrado com Sucesso!\nDeseja Cadastrar outro Cliente? S/N"   
+                    puts "Cliente Cadastrado com Sucesso!\n\nDeseja Cadastrar outro Cliente? S/N"   
                     outroCadastro = gets.chomp.to_s
                     if outroCadastro.upcase == "S" 
                         Cliente.operacoes("Incluir") 
@@ -74,21 +74,18 @@ class Cliente < Pessoa
             $cadastro_clientes.each_with_index do |cliente, index| 
                 if Interface.existe($rgs_cadastrados, @remove_cliente) == true
                     $cadastro_clientes.delete_at(index)
-                    puts "Cliente removido com Sucesso!"
+                    puts "Cliente removido com Sucesso!\n\nDeseja remover outro cliente? S/N"
+                    outroCadastro = gets.chomp.to_s
+                    if outroCadastro.upcase == "S" 
+                        Cliente.operacoes("Remover") 
+                    
+                    end 
                 else
                     puts "Cliente não encontrado"  
                 end
 
-            end    
-
-            puts "\nDeseja remover um cliente? S/N"   
-            outroCadastro = gets.chomp.to_s
-            if outroCadastro.upcase == "S" 
-                Cliente.operacoes("Remover") 
-            else
                 Interface.new_op()
-            end 
-
+            end    
               
         elsif codigoComando == "Alterar"
             if $cadastro_clientes.length == 0 
@@ -98,7 +95,6 @@ class Cliente < Pessoa
 
             puts "Informe o RG do cliente que deseja alterar"
             @alterar_cliente = gets.chomp.to_s
-            puts $cadastro_clientes
             $cadastro_clientes.each_with_index do |cliente, index| 
                 if cliente.rg == @alterar_cliente
                     puts "Informe Nome do Cliente: "
@@ -106,9 +102,12 @@ class Cliente < Pessoa
                     puts "Informe Endereco do Cliente: "
                     cliente.endereco = gets.chomp.to_s
                     cliente.rg = cliente.rg
-                    puts "Informe Data de Nascimento do Cliente: "
-                    cliente.dataNasc = gets.chomp.to_s
-                    puts "Cliente alterado com Sucesso!\nDeseja alterar dados de outro cliente? S/N"   
+                    puts "Informe Data de Nascimento do Cliente: (dd/mm/yyyy) "
+                    data = gets.chomp.to_s
+                    if Cliente.valiDate(data)
+                        cliente.dataNasc = data
+                    end                        
+                    puts "Cliente alterado com Sucesso!\n\nDeseja alterar dados de outro cliente? S/N"   
                     outroCadastro = gets.chomp.to_s
                     if outroCadastro.upcase == "S" 
                         Cliente.operacoes("Alterar") 
@@ -132,8 +131,8 @@ class Cliente < Pessoa
             comando = gets.chomp.to_i
             if comando == 1
                 $cadastro_clientes.each do |cliente| 
-                    puts "Nome:" + cliente.nome + "\t Endereço: " + cliente.endereco + "\t RG: " + cliente.rg + "\t DataNasc: " + cliente.dataNasc 
                     puts "----- " * 10
+                    puts "Nome:" + cliente.nome + "\t Endereço: " + cliente.endereco + "\t RG: " + cliente.rg + "\t DataNasc: " + cliente.dataNasc 
                 end
             elsif comando == 2
                 $cadastro_clientes.each_with_index do |cliente, index| 
@@ -141,18 +140,16 @@ class Cliente < Pessoa
                         puts "Nome:" + cliente.nome + "\t Endereço: " + cliente.endereco + "\t RG: " + cliente.rg + "\t DataNasc: " + cliente.dataNasc 
                     end
                 end
+                puts "Deseja visualizar outro cliente? S/N"   
+                outroCadastro = gets.chomp.to_s
+                if outroCadastro.upcase == "S" 
+                    Cliente.operacoes("Visualizar") 
+                end
             else
                 puts "comando invalido"
             end
-
-            puts "Deseja visualizar outro cliente? S/N"   
-            outroCadastro = gets.chomp.to_s
-            if outroCadastro.upcase == "S" 
-                Cliente.operacoes("Visualizar") 
-            else
-                Interface.new_op()     
-            end 
-
+            
+            Interface.new_op()     
         else
             puts "Comando Inválido. Tente novamente ou 0 para sair."
         end   

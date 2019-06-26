@@ -37,9 +37,8 @@ class Produto
                 @novo_cadastro.nome = gets.chomp.to_s
                 puts "Informe o valor do Produto: "
                 @novo_cadastro.valor = gets.chomp.to_f
-                Produto.typeTeste(@novo_cadastro.valor)
                 @@produtos.push(@novo_cadastro)
-                puts "Produto Cadastrado com Sucesso!\nDeseja Cadastrar outro produto? S/N"   
+                puts "Produto Cadastrado com Sucesso!\n\nDeseja Cadastrar outro produto? S/N"   
                 outro_cadastro = gets.chomp.to_s
                 if outro_cadastro.upcase == "S" 
                     Produto.operacoes("Incluir") 
@@ -62,19 +61,18 @@ class Produto
                 if Interface.existe($codigos_cadastrados, @remove_produto) == true
                     @@produtos.delete_at(index)
                     puts "Produto removido com Sucesso!"
+                    puts "\n\nDeseja remover um produto? S/N"   
+                    outro_cadastro = gets.chomp.to_s
+                    if outro_cadastro.upcase == "S" 
+                        Produto.operacoes("Remover") 
+                    end 
                 else
                     puts "Produto não encontrado"  
                 end
+                Interface.new_op()
 
             end    
 
-            puts "\nDeseja remover um produto? S/N"   
-            outro_cadastro = gets.chomp.to_s
-            if outro_cadastro.upcase == "S" 
-                Produto.operacoes("Remover") 
-            else
-                Interface.new_op()
-            end 
 
               
         elsif comando_operacao == "Alterar"
@@ -91,7 +89,7 @@ class Produto
                     produto.nome = gets.chomp.to_s
                     puts "Informe novo preço do produto: "
                     produto.valor = gets.chomp.to_f
-                    puts "\nDeseja alterar outro produto? S/N"   
+                    puts "Produto alterado com Sucesso\n\nDeseja alterar outro produto? S/N"   
                     outroCadastro = gets.chomp.to_s
                     if outroCadastro.upcase == "S"        
                         Cliente.operacoes("Alterar") 
